@@ -1,0 +1,14 @@
+deploy-dev:
+  stage: deploy
+  tags:
+    - wapost  
+  only:
+     - dev 
+  # environment:
+  #   name: dev
+  #   url: https://develop.example.com  
+  
+  script:
+    - whoami
+    - cd /home/gitlab-runner/wapost/dev-wapost && git pull https://gitlab.selftech.in/wapost.net/wapost.net.git
+    - rsync -rvzt --exclude='.git/' --exclude='dev-wapost/.git/' -e "sshpass -f /home/gitlab-runner/wapost/wapost.pass ssh -p 22" --progress   /home/gitlab-runner/wapost/dev-wapost/ wapost@103.159.239.85:/home/wapost/public_html/dev.wapost.net/

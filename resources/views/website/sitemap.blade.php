@@ -1,0 +1,107 @@
+<?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://wapost.net/</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://wapost.net/features</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/pricing</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/about-us</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/documentation/dashboard</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/contact-us</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/login</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/register</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/terms-condition</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/privacy-policy</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/refund-policy</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wapost.net/documentation/connection</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wapost.net/documentation/contacts</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wapost.net/documentation/blacklist</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wapost.net/documentation/quicksend</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wapost.net/documentation/campaign_builder</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wapost.net/documentation/reports</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wapost.net/documentation/sent_messages</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wapost.net/password/reset</loc>
+  <lastmod>2023-04-11T06:04:29+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
+
+</urlset>

@@ -1,0 +1,1030 @@
+@extends('layouts/website')
+
+@section('title', __('locale.auth.register'))
+
+<link rel="stylesheet" href="{{ asset(mix('vendors/css/forms/select/select2.min.css')) }}">
+<link rel="stylesheet" href="{{ asset(mix('vendors/css/extensions/toastr.min.css')) }}">
+<link rel="stylesheet" href="{{ asset(mix('css/base/plugins/extensions/ext-component-toastr.css')) }}">
+
+<style>
+.content.get_form_data {
+    display: none;
+    visibility: hidden;
+}
+
+.content.get_form_data.active {
+    display: block;
+    visibility: visible;
+}
+
+.auth-bg {
+    background-color: #fff;
+}
+
+.width-700 {
+    width: 700px !important;
+}
+
+.bs-stepper {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 24px 0 rgba(34, 41, 47, .1);
+}
+
+.bs-stepper .bs-stepper-header {
+    border-bottom: 1px solid rgba(34, 41, 47, .08);
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 1.5rem;
+}
+
+.px-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.bs-stepper-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.bs-stepper .bs-stepper-header .step {
+    margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+.bs-stepper .bs-stepper-header .step .step-trigger {
+    flex-wrap: nowrap;
+    font-weight: 400;
+    padding: 0;
+}
+
+.bs-stepper .step-trigger.disabled,
+.bs-stepper .step-trigger:disabled {
+    pointer-events: none;
+    opacity: .65;
+}
+
+.bs-stepper .step-trigger {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #6c757d;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: none;
+    border-radius: 0.25rem;
+    transition: background-color .15s ease-out, color .15s ease-out;
+}
+
+.bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-box {
+    align-items: center;
+    background-color: rgba(186, 191, 199, .12);
+    border-radius: 0.35rem;
+    color: #babfc7;
+    display: flex;
+    font-weight: 500;
+    height: 38px;
+    justify-content: center;
+    padding: 0.5em 0;
+    width: 38px;
+}
+
+svg.font-medium-3 {
+    height: 1.3rem !important;
+    width: 1.3rem !important;
+}
+
+.font-medium-3 {
+    font-size: 1.3rem !important;
+}
+
+.feather,
+[data-feather] {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+}
+
+.bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-label {
+    margin: 0.5rem 0 0 1rem;
+    text-align: left;
+}
+
+.bs-stepper-label {
+    display: inline-block;
+    margin: 0.25rem;
+}
+
+.bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-label .bs-stepper-title {
+    color: #6e6b7b;
+    display: inherit;
+    font-weight: 600;
+    line-height: 1rem;
+    margin-bottom: 0;
+}
+
+.bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-label .bs-stepper-subtitle {
+    color: #b9b9c3;
+    font-size: .85rem;
+    font-weight: 400;
+}
+
+.bs-stepper .bs-stepper-header .line {
+    background-color: transparent;
+    color: #6e6b7b;
+    flex: 0;
+    font-size: 1.5rem;
+    margin: 0;
+    min-height: auto;
+    min-width: auto;
+    padding: 0 1.75rem;
+}
+
+.bs-stepper .bs-stepper-header .step.active .step-trigger .bs-stepper-box {
+    background-color: #08828c;
+    box-shadow: 0 3px 6px 0 rgb(8 130 140 / 43%);
+    color: #fff;
+}
+
+.bs-stepper .bs-stepper-header .step.active .step-trigger .bs-stepper-label .bs-stepper-title {
+    color: #08828c;
+}
+
+.bs-stepper .bs-stepper-header .step.active .step-trigger {
+    opacity: 1;
+}
+
+.content-header h2 {
+    color: #5e5873;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+    font-size: calc(1.2964rem + .5568vw);
+}
+
+.content-header span {
+    color: #6e6b7b;
+    font-family: "Montserrat", Helvetica, Arial, serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+form label {
+    color: #5e5873;
+    font-size: .857rem;
+    margin-bottom: 0.2857rem;
+}
+
+.form-control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-clip: padding-box;
+    background-color: #fff;
+    border: 1px solid #d8d6de;
+    border-radius: 0.357rem;
+    color: #6e6b7b;
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.45;
+    padding: 0.571rem 1rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    width: 100%;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 26px;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 20px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #444;
+    line-height: 28px;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    display: block;
+    padding-left: 8px;
+    padding-right: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Change the white to any color */
+form .get_form_data input:-webkit-autofill,
+form .get_form_data input:-webkit-autofill:hover,
+form .get_form_data input:-webkit-autofill:focus,
+form .get_form_data input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+form .get_form_data .input-group-text {
+    background-color: #fff;
+}
+
+.input-group-merge .form-control:not(:last-child) {
+    border-right: 0;
+    padding-right: 0;
+}
+
+.position-relative .position-relative:nth-child(2) {
+    display: none;
+}
+
+form .get_form_data .form-control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-clip: padding-box;
+    background-color: #fff;
+    border: 1px solid #d8d6de;
+    border-radius: 0.357rem;
+    color: #6e6b7b;
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.45;
+    padding: 0.571rem 1rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.select2-container--classic .select2-selection--single,
+.select2-container--default .select2-selection--single {
+    border: 1px solid #d8d6de;
+    min-height: 2.714rem;
+    padding: 5px;
+}
+
+.select2-container--classic .select2-selection--single .select2-selection__arrow b,
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    background-image: "{{ asset('public/website/img/icon/select-arrow.svg') }}";
+    background-repeat: no-repeat;
+    background-size: 18px 14px, 18px 14px;
+    border-style: none;
+    height: 1rem;
+    left: -8px;
+    margin-left: 0;
+    margin-top: 0;
+    padding-right: 1.5rem;
+}
+
+.custom-options-checkable .custom-option-item {
+    background-color: hsla(213, 4%, 53%, .06);
+    border: 1px solid #ebe9f1;
+    border-radius: 0.42rem;
+    color: #82868b;
+    cursor: pointer;
+    width: 100%;
+}
+
+.custom-options-checkable .custom-option-item {
+    background-color: hsla(213, 4%, 53%, .06);
+    border: 1px solid #ebe9f1;
+    border-radius: .42rem;
+    color: #82868b;
+    cursor: pointer;
+    width: 100%
+}
+
+.custom-options-checkable .custom-option-item .custom-option-item-title {
+    color: #82868b
+}
+
+.custom-option-item-check {
+    clip: rect(0, 0, 0, 0);
+    position: absolute;
+}
+
+.custom-option-item-check:checked+.custom-option-item {
+    background-color: rgba(115, 103, 240, .12);
+    border-color: #7367f0;
+    color: #7367f0
+}
+
+.custom-option-item-check:checked+.custom-option-item .custom-option-item-title {
+    color: #7367f0
+}
+
+.auth-wrapper .custom-options-checkable .plan-price .pricing-value {
+    font-size: 3rem;
+    color: var(--main-color-one) !important;
+}
+
+.font-medium-1 {
+    font-size: 1.1rem !important;
+    font-weight: 500 !important;
+    color: rgba(110, 107, 123, 1) !important;
+}
+
+.custom-option-item span.d-block {
+    color: #82868b;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1.45;
+    font-weight: 400;
+    font-family: var(--body-font);
+}
+.back-btn a {
+    color: #0d6efd;
+}
+.content.get_form_data .btn-primary,.content.get_form_data .btn-success {
+    display: inline-block;
+    font-family: var(--body-font);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 0;
+    text-transform: capitalize;
+    color: var(--heading-color);
+    background-color: #fff;
+    padding: 20px 24px 20px;
+    border: 1px solid #E4E4E4;
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    -webkit-transition: all ease-in-out 0.2s;
+    transition: all ease-in-out 0.2s;
+    position: relative;
+    z-index: 1;
+}
+.content.get_form_data .btn-primary,.content.get_form_data .btn-success {
+    background-color: var(--main-color-one);
+    border-color: var(--main-color-one);
+    color: #fff;
+}
+.content.get_form_data .btn-primary:hover,.content.get_form_data .btn-success:hover{
+    background-color: transparent;
+    color: var(--main-color-one);
+}
+.content.get_form_data button.btn.btn-outline-secondary {
+    border-radius: 10px;
+    display: inline-block;
+    font-family: var(--body-font);
+    font-size: 18px;
+    line-height: 0;
+    text-transform: capitalize;
+    background-color: #fff;
+    padding: 20px 20px 20px;
+    border-radius: 15px;
+    text-align: center;
+    -webkit-transition: all ease-in-out 0.2s;
+    transition: all ease-in-out 0.2s;
+    position: relative;
+    z-index: 1;
+}
+.widget.widget_subscribe .subscibe-wrapper .content-wrap .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.required:after {
+    content:" *";
+    color: red;
+}
+.footer-area .social-media-list.style-01 .single-social-item a{
+    display: flex !important;
+    align-items: center;
+    justify-content: space-around;
+}
+@media (max-width:768px){
+    .bs-stepper .bs-stepper-header{
+        display: block;
+    }
+    .bs-stepper .bs-stepper-header .line{
+        opacity: 0;
+    }
+}
+@media (max-width:991px){
+    .content-wrapper.register-page{
+        margin-top:50px;
+    }
+}
+</style>
+@section('content')
+
+<div class="content-wrapper register-page single-page-section-top-space">
+    <div class="content-body section-top-space">
+        <div class="container custom-container custom-container-01">
+            <div class="auth-wrapper auth-cover">
+                <div class="auth-inner row m-0">
+                    
+                    <!-- Left Text-->
+                    <div class="col-lg-3 d-none d-lg-flex align-items-center p-0">
+                        <div class="w-100 d-lg-flex align-items-center justify-content-center">
+                            <img class="img-fluid w-100" src="{{asset('images/pages/create-account.svg')}}" alt="{{config('app.name')}}"/>    
+                        </div>
+                    </div>
+                    <!-- /Left Text-->
+
+                    <!-- Register-->
+                    <div class="col-lg-9 d-flex align-items-center auth-bg px-2 px-sm-3 px-lg-5 pt-3 pb-5">
+                        <div class="width-700 mx-auto">
+                            <div class="bs-stepper register-multi-steps-wizard shadow-none linear">
+                                <div class="bs-stepper-header px-0" role="tablist">
+
+
+                                    <div class="step active" data-target="#account-details" role="tab"
+                                        id="account-details-trigger">
+                                        <button type="button" class="step-trigger" aria-selected="true"
+                                            disabled="disabled">
+                                            <span class="bs-stepper-box">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-home font-medium-3">
+                                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                                </svg>
+                                            </span>
+                                            <span class="bs-stepper-label">
+                                                <span class="bs-stepper-title">{{ __('locale.labels.account') }}</span>
+                                                <span class="bs-stepper-subtitle">{{ __('locale.auth.enter_credentials') }}</span>
+                                            </span>
+                                        </button>
+                                    </div>
+
+
+                                    <div class="line">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-chevron-right font-medium-2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </div>
+
+                                    <div class="step" data-target="#personal-info" role="tab"
+                                        id="personal-info-trigger">
+                                        <button type="button" class="step-trigger" aria-selected="false"
+                                            disabled="disabled">
+                                            <span class="bs-stepper-box">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-user font-medium-3">
+                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                    <circle cx="12" cy="7" r="4"></circle>
+                                                </svg>
+                                            </span>
+
+                                            <span class="bs-stepper-label">
+                                                <span class="bs-stepper-title">{{ __('locale.auth.personal') }}</span>
+                                                <span class="bs-stepper-subtitle">{{ __('locale.customer.personal_information') }}</span>
+                                            </span>
+                                        </button>
+                                    </div>
+
+
+                                    <div class="line">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-chevron-right font-medium-2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="step" data-target="#billing" role="tab" id="billing-trigger">
+                                        <button type="button" class="step-trigger" aria-selected="false"
+                                            disabled="disabled">
+                                            <span class="bs-stepper-box">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-credit-card font-medium-3">
+                                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                                </svg>
+                                            </span>
+
+                                            <span class="bs-stepper-label">
+                                                <span class="bs-stepper-title">{{ __('locale.labels.billing') }}</span>
+                                                <span class="bs-stepper-subtitle">{{ __('locale.labels.payment_details') }}</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="bs-stepper-content px-0 mt-5">
+                                    
+                                    @if ($errors->any())
+
+                                        @foreach ($errors->all() as $error)
+                                            <div class="alert alert-danger" role="alert">
+                                                <div class="alert-body">{{ $error }}</div>
+                                            </div>
+                                        @endforeach
+
+                                    @endif
+                                    
+                                    <form method="POST" action="{{ route('register') }}" id="registration">  
+                                        @csrf
+                                        <div id="account-details" class="content get_form_data active dstepper-block"
+                                            role="tabpanel" aria-labelledby="account-details-trigger">
+                                            <div class="content-header mb-3">
+                                                <h2 class="fw-bolder mb-4">{{ __('locale.auth.account_information') }}</h2>
+                                                <span>{{ __('locale.auth.create_new_account') }}</span>
+                                            </div>
+
+                                            <div class="row">
+
+                                                <div class="col-12 mb-4">
+                                                    <label class="form-label required" for="email">{{ __('locale.labels.email') }}</label>
+                                                    <input type="email" id="email" class="form-control required @error('email') is-invalid @enderror" value="{{ old('email') }}" name="email" required/>
+                                             
+                                                    @error('email')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-md-6 mb-4">
+                                                    <label class="form-label required" for="password">{{ __('locale.labels.password') }}</label>
+                                                    <div class="input-group input-group-merge form-password-toggle">
+                                                    <input type="password" id="password" class="form-control @error('password') is-invalid @enderror" value="{{ old('password') }}" name="password" required/>
+                                                        <span class="input-group-text cursor-pointer" onclick="toggle_pass()"><svg
+                                                                xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                height="14" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="feather feather-eye">
+                                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z">
+                                                                </path>
+                                                                <circle cx="12" cy="12" r="3"></circle>
+                                                            </svg></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 mb-4">
+                                                    <label class="form-label required" for="password_confirmation">{{ __('locale.labels.password_confirmation') }}</label>
+                                                    <div class="input-group input-group-merge form-password-toggle">
+                                                    <input type="password" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror"
+                                                       value="{{ old('password_confirmation') }}"
+                                                       name="password_confirmation" required/>
+                                                        <span class="input-group-text cursor-pointer" onclick="toggle_confpass()"><svg
+                                                                xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                height="14" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="feather feather-eye">
+                                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z">
+                                                                </path>
+                                                                <circle cx="12" cy="12" r="3"></circle>
+                                                            </svg></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 col-md-6">
+                                                    <label class="form-label required" for="timezone">{{ __('locale.labels.timezone') }}</label>
+                                                    <div class="position-relative"><select
+                                                            class="select2 w-100 select2-hidden-accessible"
+                                                            name="timezone" id="timezone" data-select2-id="timezone"
+                                                            tabindex="-1" aria-hidden="true">
+                                                            @foreach(\App\Library\Tool::allTimeZones() as $timezone)
+                                                                <option value="{{$timezone['zone']}}" {{ config('app.timezone') == $timezone['zone'] ? 'selected': null }}>
+                                                                    {{ $timezone['text'] }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 col-md-6">
+                                                    <label class="form-label required" for="locale">{{ __('locale.labels.language') }}</label>
+                                                    <div class="position-relative">
+                                                        <select class="select2 w-100 select2-hidden-accessible"
+                                                            name="locale" id="locale" data-select2-id="locale"
+                                                            tabindex="-1" aria-hidden="true">
+                                                            @foreach($languages as $language)
+                                                                <option value="{{ $language->code }}" {{old('locale') == $language->code ? 'selected': null }}> {{ $language->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-1">
+                                                    @if(config('no-captcha.registration'))
+                                                        <fieldset class="form-label-group position-relative">
+                                                            {{ no_captcha()->input('g-recaptcha-response') }}
+                                                        </fieldset>
+                                                    @endif
+
+                                                    @if(config('no-captcha.registration'))
+                                                        @error('g-recaptcha-response')
+                                                        <span class="text-danger">{{ __('locale.labels.g-recaptcha-response') }}</span>
+                                                        @enderror
+                                                    @endif
+                                                </div>
+                                                <p class="mt-3 mb-5 back-btn">
+                                                    <a href="{{route('login')}}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            class="feather feather-chevron-left">
+                                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                                        </svg> {{ __('locale.auth.back_to_login') }}
+                                                    </a>
+                                                </p>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <button class="btn btn-outline-secondary btn-prev waves-effect"
+                                                    disabled="" type="button">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="feather feather-chevron-left align-middle me-sm-25 me-0">
+                                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                                    </svg>
+                                                    <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
+                                                </button>
+                                                <button
+                                                    class="btn btn-primary btn-next waves-effect waves-float waves-light"
+                                                    type="button">
+                                                    <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.next') }}</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="feather feather-chevron-right align-middle ms-sm-25 ms-0">
+                                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div id="personal-info" class="content get_form_data" role="tabpanel"
+                                            aria-labelledby="personal-info-trigger">
+                                            <div class="content-header mb-4">
+                                                <h2 class="fw-bolder mb-4">{{__('locale.customer.personal_information') }}</h2>
+                                                <span>{{ __('locale.auth.create_new_account') }}</span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="mb-4 col-md-6">
+                                                    <label class="form-label required" for="first_name">{{ __('locale.labels.first_name') }}</label>
+                                                    <input id="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" placeholder="{{ __('locale.labels.first_name') }}" value="{{ old('first_name') }}" required autocomplete="first_name"/>
+                                                    @error('first_name')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-4 col-md-6">
+                                                    <label class="form-label" for="last_name">{{ __('locale.labels.last_name') }}</label>
+                                                    <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" placeholder="{{ __('locale.labels.last_name') }}" value="{{ old('last_name') }}" autocomplete="last_name"/>
+                                                    @error('last_name')
+                                                    <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-md-6 mb-4">
+                                                    <label class="form-label required" for="phone">{{ __('locale.labels.phone') }}</label>
+                                                    <input type="number" id="phone" class="form-control @error('phone') is-invalid @enderror" name="phone" required placeholder="{{__('locale.labels.phone')}}" value="{{ old('phone') }}">
+                                                    @error('phone')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-md-6 mb-4">
+                                                    <label class="form-label" for="postcode">{{ __('locale.labels.postcode') }}</label>
+                                                    <input type="text" id="postcode" class="form-control @error('postcode') is-invalid @enderror" name="postcode" placeholder="{{__('locale.labels.postal_code')}}" value="{{ old('postcode') }}">
+                                                    @error('postcode')
+                                                    <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mb-4">
+                                                    <label class="form-label required" for="address">{{ __('locale.labels.address') }}</label>
+                                                    <input type="text" id="address" class="form-control @error('address') is-invalid @enderror" name="address" required placeholder="{{ __('locale.labels.address') }}" value="{{ old('address') }}">
+                                                    @error('address')
+                                                    <div class="invalid-feedback">
+                                                        <strong>{{ $message }}</strong>
+                                                    </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mb-4">
+                                                    <label class="form-label" for="company">{{ __('locale.labels.company') }}</label>
+                                                    <input type="text" id="company" class="form-control @error('company') is-invalid @enderror" name="company" placeholder="{{ __('locale.labels.company') }}" value="{{ old('company') }}">
+                                                    @error('company')
+                                                    <div class="invalid-feedback">
+                                                        <strong>{{ $message }}</strong>
+                                                    </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-4 col-md-6">
+                                                    <label class="form-label required" for="city">{{ __('locale.labels.city') }}</label>
+                                                    <input type="text" id="city" class="form-control @error('city') is-invalid @enderror" name="city" required placeholder="{{ __('locale.labels.city') }}" value="{{ old('city') }}">
+                                                    @error('city')
+                                                    <div class="invalid-feedback">
+                                                        <strong>{{ $message }}</strong>
+                                                    </div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-4 col-md-6">
+                                                    <label class="form-label required" for="country">{{ __('locale.labels.country') }}</label>
+                                                    <div class="position-relative">
+                                                        <select
+                                                            class="select2 w-100 select2-hidden-accessible"
+                                                            name="country" id="country" required=""
+                                                            data-select2-id="country" tabindex="-1" aria-hidden="true">
+                                                            @foreach(\App\Helpers\Helper::countries() as $country)
+                                                                <option value="{{$country['name']}}" {{ config('app.country') == $country['name'] ? 'selected': null }}> {{ $country['name'] }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="mt-3 mb-5 back-btn">
+                                                <a href="{{route('login')}}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="feather feather-chevron-left">
+                                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                                    </svg> {{ __('locale.auth.back_to_login') }}
+                                                </a>
+                                            </p>
+
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <button
+                                                    class="btn btn-primary btn-prev waves-effect waves-float waves-light"
+                                                    type="button">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="feather feather-chevron-left align-middle me-sm-25 me-0">
+                                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                                    </svg>
+                                                    <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
+                                                </button>
+                                                <button
+                                                    class="btn btn-primary btn-next waves-effect waves-float waves-light"
+                                                    type="button">
+                                                    <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.next') }}</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="feather feather-chevron-right align-middle ms-sm-25 ms-0">
+                                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+
+                                        <div id="billing" class="content get_form_data" role="tabpanel"
+                                            aria-labelledby="billing-trigger">
+                                            <div class="content-header mb-5">
+                                                <h2 class="fw-bolder mb-4">{{ __('locale.labels.select_plan') }}</h2>
+                                                <span>{{ __('locale.plans.select_plan_as_per_requirement') }}</span>
+                                            </div>
+
+                                            <!-- select plan options -->
+                                            <div class="row custom-options-checkable gx-3 gy-2 pricing-data">
+                                                @foreach($plans as $plan)
+                                                    <div class="col-md-4 planPrice" data-value="{{$plan->price}}">
+                                                        <input class="custom-option-item-check" type="radio" name="plans"
+                                                            id="{{ $plan->id }}" value="{{ $plan->id }}">
+                                                        <label class="custom-option-item text-center p-3" for="{{ $plan->id }}">
+                                                            <span class="custom-option-item-title h3 fw-bolder">{{ $plan->name }}</span>
+                                                            <span class="d-block m-4">{{ $plan->description }}</span>
+                                                            <span class="plan-price">
+                                                                <span class="pricing-value fw-bolder text-primary">{{ \App\Library\Tool::format_price($plan->price, $plan->currency->format) }}</span>
+                                                                <sub class="pricing-duration text-body font-medium-1 fw-bold">/{{ $plan->displayFrequencyTime() }}</sub>
+                                                            </span>
+                                                            <hr>
+                                                            <span class="d-block m-3">{{ $plan->displayTotalQuota() }} {{ __('locale.labels.whatsapp_credit') }}</span>
+                                                            <span class="d-block m-3">
+                                                                {{__('locale.labels.text_messages')}} {{ $plan->displayTotalQuota() }} {{-- $plan->getOption('plain_sms') --}} {{--__('locale.labels.credit_per_sms')--}}
+                                                            </span>
+                                                            <span class="d-block m-3">{{__('locale.labels.voice_messages')}} {{ $plan->displayTotalQuota() }} {{-- $plan->getOption('voice_sms') --}} {{--__('locale.labels.credit_per_sms')--}}</span>
+                                                            <span class="d-block m-3">{{__('locale.labels.picture_messages')}} {{ $plan->displayTotalQuota() }} {{-- $plan->getOption('mms_sms') --}} {{--__('locale.labels.credit_per_sms')--}}</span>
+                                                            @if(empty(number_format($plan->price)))
+                                                                <span class="d-block m-3">{{__('Message Queue 10-minute intervals')}}</span>
+                                                            @endif
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <!-- / select plan options -->
+                                            <div class="hide-for-free">
+                                                <div class="content-header my-4 py-1">
+                                                    <h2 class="fw-bolder mb-3">{{ __('locale.labels.payment_options') }}</h2>
+                                                    <span>{{ __('locale.payment_gateways.click_on_correct_option') }}</span>
+                                                </div>
+                                                <div class="row gx-2">
+                                                    <ul class="other-payment-options list-unstyled">
+                                                        @foreach($payment_methods as $method)
+                                                            <li>
+                                                                <div class="form-check mt-1">
+                                                                    <input type="radio" name="payment_methods" class="form-check-input" value="{{$method->type}}">
+                                                                    <label class="form-check-label">{{ $method->name }}</label>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <p class="mt-2 mb-3 back-btn">
+                                                <a href="{{route('login')}}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="feather feather-chevron-left">
+                                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                                    </svg> {{ __('locale.auth.back_to_login') }}
+                                                </a>
+                                            </p>
+                                            <div class="d-flex justify-content-between mt-1">
+                                                <button
+                                                    class="btn btn-primary btn-prev waves-effect waves-float waves-light"
+                                                    type="button">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="feather feather-chevron-left align-middle me-sm-25 me-0">
+                                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                                    </svg>
+                                                    <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
+                                                </button>
+                                                <button
+                                                    class="btn btn-success btn-submit waves-effect waves-float waves-light"
+                                                    type="submit">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="feather feather-check align-middle me-sm-25 me-0">
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                    <span class="align-middle d-sm-inline-block d-none">{{ __('locale.buttons.submit') }}</span>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BEGIN: Vendor JS-->
+<script src="{{asset(mix('vendors/js/vendors.min.js'))}}"></script>
+<!-- BEGIN Vendor JS-->
+
+<!-- BEGIN: Page Vendor JS-->
+<script src="{{asset(mix('vendors/js/ui/jquery.sticky.js'))}}"></script>
+
+<script src="{{asset(mix('vendors/js/forms/wizard/bs-stepper.min.js'))}}"></script>
+ <script src="{{asset(mix('vendors/js/forms/select/select2.full.min.js'))}}"></script>
+ 
+ <script src="{{asset(mix('vendors/js/extensions/toastr.min.js'))}}"></script>
+
+ <script>
+    let isRtl = $('html').attr('data-textdirection') === 'rtl';
+</script>
+
+<script>
+    let registerMultiStepsWizard = document.querySelector('.register-multi-steps-wizard'),
+            pageResetForm = $('.auth-register-form'),
+            numberedStepper,
+            priceOption = $('.pricing-data'),
+            select = $('.select2');
+
+        priceOption.delegate(".planPrice", "click", function (e) {
+            e.stopPropagation();
+            if($(this).data('value') === '0.00'){
+                $('.hide-for-free').hide();
+            }else{
+                $('.hide-for-free').show();
+            }
+        });
+        $('.btn-submit').click(function(){
+            $('#registration').submit();
+        });
+        // multi-steps registration
+        // --------------------------------------------------------------------
+        
+        // Horizontal Wizard
+        if (typeof registerMultiStepsWizard !== undefined && registerMultiStepsWizard !== null) {
+            numberedStepper = new Stepper(registerMultiStepsWizard);
+            $(registerMultiStepsWizard)
+                .find('.btn-next')
+                .each(function () { 
+                    $(this).on('click', function (e) {
+                        
+                        let email = $('#email').val(),
+                            password = $('#password').val(),
+                            confirm_password = $('#password_confirmation').val();
+                        if (email != '' && password != '' && confirm_password != '' && password === confirm_password) { 
+                            numberedStepper.next();
+                        } else { 
+                            e.preventDefault();
+
+                            toastr['error']("{{ __('locale.auth.insert_required_fields') }}", 'Oops..!!', {
+                                closeButton: true,
+                                positionClass: 'toast-top-right',
+                                progressBar: true,
+                                newestOnTop: true,
+                                rtl: isRtl
+                            });
+                        }
+                    });
+                });
+
+            $(registerMultiStepsWizard)
+                .find('.btn-prev')
+                .on('click', function () {
+                    numberedStepper.previous();
+                });
+        }
+
+
+    // select2
+    select.each(function() {
+        let $this = $(this);
+        $this.wrap('<div class="position-relative"></div>');
+        $this.select2({
+            // the following code is used to disable x-scrollbar when click in select input and
+            // take 100% width in responsive also
+            dropdownAutoWidth: true,
+            width: '100%',
+            dropdownParent: $this.parent()
+        });
+    });
+</script>
+<script>
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+    });
+</script>
+<script>
+    function toggle_pass() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+        x.type = "text";
+        } else {
+        x.type = "password";
+        }
+    }
+    function toggle_confpass() {
+        var x = document.getElementById("password_confirmation");
+        if (x.type === "password") {
+        x.type = "text";
+        } else {
+        x.type = "password";
+        }
+    }
+</script>
+@endsection
+
+@if(config('no-captcha.registration'))
+    @push('scripts')
+        {{ no_captcha()->script() }}
+        {{ no_captcha()->getApiScript() }}
+
+        <script>
+            grecaptcha.ready(() => {
+                window.noCaptcha.render('register', (token) => {
+                    document.querySelector('#g-recaptcha-response').value = token;
+                });
+            });
+        </script>
+    @endpush
+@endif

@@ -1,0 +1,8 @@
+User-agent: * 
+Allow: /
+Disallow: /?plan
+
+User-agent: ChatGPT-User
+Disallow:/
+
+Sitemap: https://wapost.net/sitemap.xml
